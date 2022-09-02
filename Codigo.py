@@ -1,5 +1,6 @@
 # Proyecto-1
 # Proyecto Diseño Logico
+#Se escribe esto como prueba
 
 def buscar(a):#Permite la busqueda de los binarios de minterminos con su comparación de bits
     gaps = a.count('-')
