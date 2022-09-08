@@ -188,6 +188,3 @@ pdf = PDF()
 pdf.add_page()
 pdf.texts("s.txt") #Se tanscribe el archivo s.txt a un PDF
 pdf.output("solucion.pdf", "f") #Crea el archivo PDF final
-
-
-
