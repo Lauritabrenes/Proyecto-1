@@ -14,7 +14,7 @@ class PDF(FPDF): #crea la clase PDF, donde el archivo s.txt para transformarse e
         self.multi_cell(0,5,txt)
         
 documento = open("s.txt","w") #Se abre el archivo txt, donde se guardan las soluciones
-def mul(x,y): 
+def mul(x,y): #Toma los elementos de los arrays para multiplicar los minterminos
     res = []
     for i in x:
         if i+"'" in y or (len(i)==2 and i[0] in y):
@@ -26,7 +26,7 @@ def mul(x,y):
             res.append(i)
     return res
 
-def multiplicar(x,y):
+def multiplicar(x,y): #Toma los arrays y los multiplica término por termino
     res = []
     for i in x:
         for j in y:
@@ -34,14 +34,14 @@ def multiplicar(x,y):
             res.append(tmp) if len(tmp) != 0 else None
     return res
 
-def buscarIPE(x): 
+def buscarIPE(x): #Realiza la busqueda de los Implicantes primos 
     res = []
     for i in x:
         if len(x[i]) == 1:
             res.append(x[i][0]) if x[i][0] not in res else None
     return res
 
-def buscar_variable(x):
+def buscar_variable(x): #Busqueda de los bits 
     var_list = []
     for i in range(len(x)):
         if x[i] == '0':
@@ -50,7 +50,7 @@ def buscar_variable(x):
             var_list.append(chr(i+65))
     return var_list
 
-def remover(_chart,terms):
+def remover(_chart,terms): #Se elimina el bit que se repita
     for i in terms:
         for j in buscar(i):
             try:
@@ -93,7 +93,7 @@ def aplanar_lista(x): #Permite la reducción de la lista
     return elementos_aplanados
 
 
-with open("problema.txt") as archivo:
+with open("problema.txt") as archivo: #Permite la apertura del archivo txt, además de leer su contenido respectivo
     contenido = archivo.read()
     
 mt = [int(i) for i in contenido.strip().split(",")]#Ingreso de los minterminos y agregado (lee la separación por comas)
@@ -151,7 +151,7 @@ while True:
             documento.write("\t\t%-24s%s\n"%(','.join(buscar(j)),j)) #Se imprime los minterminos en terminos binarios
         documento.write('-'*50)
         
-sz = len(str(mt[-1])) 
+sz = len(str(mt[-1])) #Contador para poder imprimir los implicantes principales
 chart = {}
 documento.write('\n\n\n Cuadro de implicantes principales:\n\n    Minterminos |%s\n%s'%(' '.join((' '*(sz-len(str(i))))+str(i) for i in mt),'='*(len(mt)*(sz+1)+16)))
 for i in todos_p:
@@ -168,11 +168,11 @@ for i in todos_p:
             chart[j] = [i]
     documento.write('\n'+'-'*(len(mt)*(sz+1)+16))
 
-IPE = buscarIPE(chart) 
+IPE = buscarIPE(chart) #Busqueda de los implicantes principales esenciales
 documento.write("\nImplicantes principales esenciales: "+', '.join(str(i) for i in IPE))
 remover(chart,IPE)
 
-if(len(chart) == 0):
+if(len(chart) == 0): #Nos permite dar la resolución por una ecuación booleana
     final_result = [buscar_variable(i) for i in IPE] 
 else: 
     P = [[buscar_variable(j) for j in chart[i]] for i in chart]
