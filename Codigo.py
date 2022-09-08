@@ -34,6 +34,8 @@ def multiplicar(x,y):
             res.append(tmp) if len(tmp) != 0 else None
     return res
 
+
+
 def buscarIPE(x): 
     res = []
     for i in x:
@@ -188,4 +190,6 @@ pdf = PDF()
 pdf.add_page()
 pdf.texts("s.txt") #Se tanscribe el archivo s.txt a un PDF
 pdf.output("solucion.pdf", "f") #Crea el archivo PDF final
+
+
 
