@@ -58,7 +58,7 @@ def remover(_chart,terms):
             except KeyError:
                 pass
             
-def buscar(a):
+def buscar(a): #Permite la busqueda de los binarios de minterminos con su comparación de bits
     gaps = a.count('-')
     if gaps == 0:
         return [str(int(a,2))]
@@ -76,7 +76,7 @@ def buscar(a):
         x.pop(0)
     return temp
 
-def comparar(a,b):
+def comparar(a,b): #Comparación de bit en binarios de los minterminos
     c = 0
     for i in range(len(a)):
         if a[i] != b[i]:
@@ -86,7 +86,7 @@ def comparar(a,b):
                 return (False,None)
     return (True,indice)
 
-def aplanar_lista(x):
+def aplanar_lista(x): #Permite la reducción de la lista
     elementos_aplanados = []
     for i in x:
         elementos_aplanados.extend(x[i])
@@ -96,31 +96,31 @@ def aplanar_lista(x):
 with open("problema.txt") as archivo:
     contenido = archivo.read()
     
-mt = [int(i) for i in contenido.strip().split(",")]
+mt = [int(i) for i in contenido.strip().split(",")]#Ingreso de los minterminos y agregado (lee la separación por comas)
 mt.sort()
 largo = len(bin(mt[-1]))-2
 groups,todos_p = {},set()
 for mintermino in mt:
     try:
-        groups[bin(mintermino).count('1')].append(bin(mintermino)[2:].zfill(largo))
+        groups[bin(mintermino).count('1')].append(bin(mintermino)[2:].zfill(largo))#Permite que los minterminos agregados, sean cambiados a su forma binaria
     except KeyError:
         groups[bin(mintermino).count('1')] = [bin(mintermino)[2:].zfill(largo)]
 
-documento.write("Group No.\tMinterminos\tBinarios\n%s"%('='*50))
-for i in sorted(groups.keys()):
+documento.write("Group No.\tMinterminos\tBinarios\n%s"%('='*50))#Permite el desarrollo de la selección de los binarios de los minterminos en grupos a según los 1's que tengan
+for i in sorted(groups.keys()):#Ordenamiento de la matriz de los grupos de los binarios actuales
     documento.write("\n%5d:\n"%i)
     for j in groups[i]:
         documento.write("\t\t    %-20d%s\n"%(int(j,2),j)) 
     documento.write('-'*50)
 
 while True:
-    tmp = groups.copy()
-    groups,m,marcado,parar = {},0,set(),True
+    tmp = groups.copy()#Se realiza una copia de los grupo para manejarlos al antojo
+    groups,m,marcado,parar = {},0,set(),True #Realización de declaraciones de sentencias para el recorrido, comparación y condiciones de parada de las sentencias
     l = sorted(list(tmp.keys()))
     for i in range(len(l)-1):
         for j in tmp[l[i]]:
             for k in tmp[l[i+1]]:
-                res = comparar(j,k) 
+                res = comparar(j,k) #Inicio de la comparación de los bits de los binarios para setear su cambio 
                 if res[0]:
                     try:
                         groups[m].append(j[:res[1]]+'-'+j[res[1]+1:]) if j[:res[1]]+'-'+j[res[1]+1:] not in groups[m] else None 
@@ -130,14 +130,14 @@ while True:
                     marcado.add(j) 
                     marcado.add(k) 
         m += 1
-    no_marcados = set(aplanar_lista(tmp)).difference(marcado) 
-    todos_p = todos_p.union(no_marcados) 
+    no_marcados = set(aplanar_lista(tmp)).difference(marcado) #Aquellos elementos que no tienen comparativa de bits con otro binario en la matriz
+    todos_p = todos_p.union(no_marcados) #Implicantes primos
     documento.write("\nElementos no marcados de la tabla:")
     if len(no_marcados)==0:
         documento.write("None\n")
     else:
         documento.write(', '.join(no_marcados))
-    if parar:
+    if parar: #Cuando los minterminos no logran tener una comparación
         documento.write("\n\nTodos los implicantes principales: ")
         if len(todos_p)==0:
              documento.write("None\n")
@@ -145,10 +145,10 @@ while True:
             documento.write(', '.join(todos_p))
         break 
     documento.write("\n\n\n\nGroup No.\tMinterminos\tBinarios\n%s"%('='*50))
-    for i in sorted(groups.keys()):
+    for i in sorted(groups.keys()): #Se agrupan los pares y sus repectivos binarios con cambios de bit
         documento.write("\n%5d:\n"%i) 
         for j in groups[i]:
-            documento.write("\t\t%-24s%s\n"%(','.join(buscar(j)),j)) 
+            documento.write("\t\t%-24s%s\n"%(','.join(buscar(j)),j)) #Se imprime los minterminos en terminos binarios
         documento.write('-'*50)
         
 sz = len(str(mt[-1])) 
