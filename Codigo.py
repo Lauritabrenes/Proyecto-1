@@ -14,7 +14,7 @@ class PDF(FPDF): #crea la clase PDF, donde el archivo s.txt para transformarse e
         self.multi_cell(0,5,txt)
         
 documento = open("s.txt","w") #Se abre el archivo txt, donde se guardan las soluciones
-def mul(x,y): #Toma los elementos de los arrays para multiplicar los minterminos
+def mul(x,y): 
     res = []
     for i in x:
         if i+"'" in y or (len(i)==2 and i[0] in y):
@@ -26,7 +26,7 @@ def mul(x,y): #Toma los elementos de los arrays para multiplicar los minterminos
             res.append(i)
     return res
 
-def multiplicar(x,y): #Toma los arrays y los multiplica término por termino
+def multiplicar(x,y):
     res = []
     for i in x:
         for j in y:
@@ -34,14 +34,14 @@ def multiplicar(x,y): #Toma los arrays y los multiplica término por termino
             res.append(tmp) if len(tmp) != 0 else None
     return res
 
-def buscarIPE(x): #Realiza la busqueda de los Implicantes primos 
+def buscarIPE(x): 
     res = []
     for i in x:
         if len(x[i]) == 1:
             res.append(x[i][0]) if x[i][0] not in res else None
     return res
 
-def buscar_variable(x): #Busqueda de los bits 
+def buscar_variable(x):
     var_list = []
     for i in range(len(x)):
         if x[i] == '0':
@@ -50,7 +50,7 @@ def buscar_variable(x): #Busqueda de los bits
             var_list.append(chr(i+65))
     return var_list
 
-def remover(_chart,terms): #Se elimina el bit que se repita
+def remover(_chart,terms):
     for i in terms:
         for j in buscar(i):
             try:
@@ -93,7 +93,7 @@ def aplanar_lista(x): #Permite la reducción de la lista
     return elementos_aplanados
 
 
-with open("problema.txt") as archivo: #Permite la apertura del archivo txt, además de leer su contenido respectivo
+with open("problema.txt") as archivo:
     contenido = archivo.read()
     
 mt = [int(i) for i in contenido.strip().split(",")]#Ingreso de los minterminos y agregado (lee la separación por comas)
@@ -144,35 +144,35 @@ while True:
         else:
             documento.write(', '.join(todos_p))
         break 
-    documento.write("\n\n\n\nGroup No.\tMinterminos\tBinarios\n%s"%('='*50))
+    documento.write("\n\n\n\nGroup No.\tMinterminos\tBinarios\n%s"%('='*30))
     for i in sorted(groups.keys()): #Se agrupan los pares y sus repectivos binarios con cambios de bit
         documento.write("\n%5d:\n"%i) 
         for j in groups[i]:
             documento.write("\t\t%-24s%s\n"%(','.join(buscar(j)),j)) #Se imprime los minterminos en terminos binarios
         documento.write('-'*50)
         
-sz = len(str(mt[-1])) #Contador para poder imprimir los implicantes principales
+sz = len(str(mt[-1])) 
 chart = {}
-documento.write('\n\n\n Cuadro de implicantes principales:\n\n    Minterminos |%s\n%s'%(' '.join((' '*(sz-len(str(i))))+str(i) for i in mt),'='*(len(mt)*(sz+1)+16)))
+documento.write('\n\n\nCuadro de implicantes principales:\n\nMinterminos |%s\n%s'%(' '.join((' '*(sz-len(str(i))))+str(i) for i in mt),'='*(len(mt)*(sz+1)+10)))
 for i in todos_p:
     merged_minterms,y = buscar(i),0
     documento.write("\n%-16s|"%','.join(merged_minterms))
     cd= str(mt[0])
     for j in merged_minterms:
         x = mt.index(int(j))*(sz+1)
-        documento.write(' '*abs(x-y)+' '*(sz-1)+'X')
+        documento.write('  '*abs(x-y)+'  '*(sz-1)+'X')
         y = x+sz
         try:
             chart[j].append(i) if i not in chart[j] else None 
         except KeyError:
             chart[j] = [i]
-    documento.write('\n'+'-'*(len(mt)*(sz+1)+16))
+    documento.write('\n'+'-'*(len(mt)*(sz+1)+28))
 
-IPE = buscarIPE(chart) #Busqueda de los implicantes principales esenciales
+IPE = buscarIPE(chart) 
 documento.write("\nImplicantes principales esenciales: "+', '.join(str(i) for i in IPE))
 remover(chart,IPE)
 
-if(len(chart) == 0): #Nos permite dar la resolución por una ecuación booleana
+if(len(chart) == 0):
     final_result = [buscar_variable(i) for i in IPE] 
 else: 
     P = [[buscar_variable(j) for j in chart[i]] for i in chart]
