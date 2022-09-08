@@ -106,7 +106,7 @@ for mintermino in mt:
     except KeyError:
         groups[bin(mintermino).count('1')] = [bin(mintermino)[2:].zfill(largo)]
 
-documento.write("Group No.\tMinterminos\tBinarios\n%s"%('='*50))#Permite el desarrollo de la selección de los binarios de los minterminos en grupos a según los 1's que tengan
+documento.write("Group No.\tMinterminos\tBinarios\n%s"%('='*30))#Permite el desarrollo de la selección de los binarios de los minterminos en grupos a según los 1's que tengan
 for i in sorted(groups.keys()):#Ordenamiento de la matriz de los grupos de los binarios actuales
     documento.write("\n%5d:\n"%i)
     for j in groups[i]:
@@ -144,7 +144,7 @@ while True:
         else:
             documento.write(', '.join(todos_p))
         break 
-    documento.write("\n\n\n\nGroup No.\tMinterminos\tBinarios\n%s"%('='*50))
+    documento.write("\n\n\n\nGroup No.\tMinterminos\tBinarios\n%s"%('='*30))
     for i in sorted(groups.keys()): #Se agrupan los pares y sus repectivos binarios con cambios de bit
         documento.write("\n%5d:\n"%i) 
         for j in groups[i]:
@@ -153,20 +153,20 @@ while True:
         
 sz = len(str(mt[-1])) #Contador para poder imprimir los implicantes principales
 chart = {}
-documento.write('\n\n\n Cuadro de implicantes principales:\n\n    Minterminos |%s\n%s'%(' '.join((' '*(sz-len(str(i))))+str(i) for i in mt),'='*(len(mt)*(sz+1)+16)))
+documento.write('\n\n\nCuadro de implicantes principales:\n\nMinterminos |%s\n%s'%('  '.join(('  '*(sz-len(str(i))))+str(i) for i in mt),'='*(len(mt)*(sz+1)+10)))
 for i in todos_p:
     merged_minterms,y = buscar(i),0
     documento.write("\n%-16s|"%','.join(merged_minterms))
     cd= str(mt[0])
     for j in merged_minterms:
         x = mt.index(int(j))*(sz+1)
-        documento.write(' '*abs(x-y)+' '*(sz-1)+'X')
+        documento.write('  '*abs(x-y)+'  '*(sz-1)+'X')
         y = x+sz
         try:
             chart[j].append(i) if i not in chart[j] else None 
         except KeyError:
             chart[j] = [i]
-    documento.write('\n'+'-'*(len(mt)*(sz+1)+16))
+    documento.write('\n'+'-'*(len(mt)*(sz+1)+28))
 
 IPE = buscarIPE(chart) #Busqueda de los implicantes principales esenciales
 documento.write("\nImplicantes principales esenciales: "+', '.join(str(i) for i in IPE))
