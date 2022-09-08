@@ -34,8 +34,6 @@ def multiplicar(x,y):
             res.append(tmp) if len(tmp) != 0 else None
     return res
 
-
-
 def buscarIPE(x): 
     res = []
     for i in x:
