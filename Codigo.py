@@ -1,6 +1,5 @@
 # Proyecto-1
 # Proyecto Diseño Logico
-#hola
 
 from fpdf import FPDF
 
